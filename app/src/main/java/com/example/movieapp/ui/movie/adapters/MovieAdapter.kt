@@ -40,7 +40,7 @@ class MovieAdapter(private val movieList: List<Movie>, private val itemClickList
 
     private inner class MoviesViewHolder(val binding: MovieItemBinding, val context: Context): BaseViewHolder<Movie>(binding.root){
         override fun bind(item: Movie) {
-            Glide.with(context).load("http://image.tmdb.org/t/p/w500${item.poster_path}")
+            Glide.with(context).load("http://image.tmdb.org/t/p/w500/${item.poster_path}")
                                 .centerCrop().into(binding.imgMovie)
         }
 
