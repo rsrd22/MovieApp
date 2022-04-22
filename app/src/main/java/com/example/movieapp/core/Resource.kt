@@ -1,6 +1,5 @@
 package com.example.movieapp.core
 
-import java.lang.Exception
 
 sealed class Resource<out T>{
 

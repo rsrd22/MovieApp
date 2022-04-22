@@ -1,6 +1,7 @@
 package com.example.movieapp.ui.movie.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -38,10 +39,16 @@ class MovieAdapter(private val movieList: List<Movie>, private val itemClickList
 
     override fun getItemCount(): Int = movieList.size
 
-    private inner class MoviesViewHolder(val binding: MovieItemBinding, val context: Context): BaseViewHolder<Movie>(binding.root){
+    private inner class MoviesViewHolder(
+        val binding: MovieItemBinding,
+        val context: Context
+        ) :
+        BaseViewHolder<Movie>(binding.root) {
         override fun bind(item: Movie) {
-            Glide.with(context).load("http://image.tmdb.org/t/p/w500/${item.poster_path}")
-                                .centerCrop().into(binding.imgMovie)
+            //                             https://image.tmdb.org/t/p/w500/7qop80YfuO0BwJa1uXk1DXUUEwv.jpg
+            //Log.d("poster_path", "path: ${item.poster_path}")
+            Glide.with(context).load("https://image.tmdb.org/t/p/w500/${item.poster_path}")
+                .centerCrop().into(binding.imgMovie)
         }
 
     }
