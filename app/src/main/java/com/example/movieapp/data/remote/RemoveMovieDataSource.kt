@@ -5,7 +5,7 @@ import com.example.movieapp.data.model.MovieList
 import com.example.movieapp.repository.RetrofitClient
 import com.example.movieapp.repository.WebService
 
-class MovieDataSource(private val webService: WebService) {
+class RemoveMovieDataSource(private val webService: WebService) {
 
     suspend fun getUpcomingMovies(): MovieList = webService.getUpcomingMovies(AppConstants.API_KEY)
 

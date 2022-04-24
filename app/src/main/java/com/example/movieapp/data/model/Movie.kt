@@ -11,7 +11,6 @@ data class Movie(
 
     val adult: Boolean = false,
     val backdrop_path: String = "",
-    val genre_ids: List<Int> = listOf(),
     val id: Int = -1,
     val original_title: String= "",
     val original_language: String = "",
@@ -22,7 +21,8 @@ data class Movie(
     val title: String = "",
     val video: Boolean = false,
     val vote_average: Double = -1.0,
-    val vote_count:  Int = -1
+    val vote_count:  Int = -1,
+    val movie_type: String = ""
 ): Parcelable
 
 data class MovieList (val results: List<Movie> = listOf() )
@@ -31,13 +31,13 @@ data class MovieList (val results: List<Movie> = listOf() )
 
 @Entity
 data class MovieEntity(
+    @PrimaryKey
+    val id: Int = -1,
     @ColumnInfo(name = "adult")
     val adult: Boolean = false,
     @ColumnInfo(name = "backdrop_path")
     val backdrop_path: String = "",
     //val genre_ids: List<Int> = listOf(),
-    @PrimaryKey
-    val id: Int = -1,
     @ColumnInfo(name = "original_title")
     val original_title: String= "",
     @ColumnInfo(name = "original_language")
@@ -57,5 +57,32 @@ data class MovieEntity(
     @ColumnInfo(name = "vote_average")
     val vote_average: Double = -1.0,
     @ColumnInfo(name = "vote_count")
-    val vote_count:  Int = -1
+    val vote_count:  Int = -1,
+    @ColumnInfo(name = "movie_type")
+    val movie_type: String = ""
+)
+
+fun List<MovieEntity>.toMovieList(): MovieList{
+    val resultList = mutableListOf<Movie>()
+    this.forEach { movieEntity ->
+        resultList.add(movieEntity.toMovie())
+    }
+    return MovieList(resultList)
+}
+
+fun MovieEntity.toMovie(): Movie = Movie(
+    this.adult,
+    this.backdrop_path,
+    this.id,
+    this.original_title,
+    this.original_language,
+    this.overview,
+    this.popularity,
+    this.poster_path,
+    this.release_date,
+    this.title,
+    this.video,
+    this.vote_average,
+    this.vote_count,
+    this.movie_type
 )
