@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import com.example.movieapp.R
 import com.example.movieapp.core.Resource
+import com.example.movieapp.data.local.AppDatabase
+import com.example.movieapp.data.local.LocalMovieDataSource
 import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.remote.RemoveMovieDataSource
 import com.example.movieapp.databinding.FragmentMovieBinding
@@ -28,7 +30,12 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapter.OnMovieCli
     private lateinit var concatAdapter: ConcatAdapter
     private lateinit var binding: FragmentMovieBinding
     private val viewModel by viewModels<MovieViewModel> {
-        MovieViewModelFactory(MovieRepositoryImpl(RemoveMovieDataSource(RetrofitClient.webservice)))
+        MovieViewModelFactory(
+            MovieRepositoryImpl(
+                RemoveMovieDataSource(RetrofitClient.webservice),
+                LocalMovieDataSource(AppDatabase.getDatabase(requireContext()).movieDao())
+            )
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +86,11 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapter.OnMovieCli
                 is Resource.Failure -> {
                     binding.progressBar.visibility = View.GONE
                     Log.d("Error LiveData", "${result.exception}")
-                    Toast.makeText(requireContext(), "Error: ${result.exception}", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Error: ${result.exception}",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }
@@ -91,7 +102,7 @@ class MovieFragment : Fragment(R.layout.fragment_movie), MovieAdapter.OnMovieCli
         Log.d("Movie", "onMovieClick: $movie")
         val action = MovieFragmentDirections.actionMovieFragmentToMovieDetailsFragment(
             movie.poster_path,
-            movie.backdrop_path,
+            movie.backdrop_path?:"",
             movie.vote_average.toFloat(),
             movie.vote_count,
             movie.overview,

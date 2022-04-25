@@ -10,9 +10,9 @@ import kotlinx.android.parcel.Parcelize
 data class Movie(
 
     val adult: Boolean = false,
-    val backdrop_path: String = "",
+    val backdrop_path: String ?= "",
     val id: Int = -1,
-    val original_title: String= "",
+    val original_title: String = "",
     val original_language: String = "",
     val overview: String = "",
     val popularity: Double = -1.0,
@@ -31,12 +31,13 @@ data class MovieList (val results: List<Movie> = listOf() )
 
 @Entity
 data class MovieEntity(
-    @PrimaryKey
-    val id: Int = -1,
+
     @ColumnInfo(name = "adult")
     val adult: Boolean = false,
     @ColumnInfo(name = "backdrop_path")
     val backdrop_path: String = "",
+    @PrimaryKey
+    val id: Int = -1,
     //val genre_ids: List<Int> = listOf(),
     @ColumnInfo(name = "original_title")
     val original_title: String= "",
@@ -85,4 +86,21 @@ fun MovieEntity.toMovie(): Movie = Movie(
     this.vote_average,
     this.vote_count,
     this.movie_type
+)
+
+fun Movie.toMovieEntity(movieType: String): MovieEntity = MovieEntity(
+    this.adult,
+    this.backdrop_path?:"",
+    this.id,
+    this.original_title,
+    this.original_language,
+    this.overview,
+    this.popularity,
+    this.poster_path,
+    this.release_date,
+    this.title,
+    this.video,
+    this.vote_average,
+    this.vote_count,
+    movie_type = movieType
 )
